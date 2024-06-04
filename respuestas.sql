@@ -58,6 +58,21 @@ INNER JOIN film_actor fa2 ON fa2.film_id = f2.film_id AND fa2.actor_id = (
 );
 
 /* 7 */
-
+SELECT *
+FROM film f
+INNER JOIN inventory i ON i.film_id = f.film_id
+INNER JOIN rental r ON r.inventory_id = i.inventory_id
+INNER JOIN customer c ON r.customer_id = c.customer_id
+WHERE c.customer_id = (
+	SELECT
+		c2.customer_id
+	FROM
+		customer c2
+	INNER JOIN payment p2 ON
+		p2.customer_id = c2.customer_id
+	GROUP BY c2.customer_id
+	ORDER BY COUNT(*) DESC
+	LIMIT 1
+);
 
 /* 8 */
