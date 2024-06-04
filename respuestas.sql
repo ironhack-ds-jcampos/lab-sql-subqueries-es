@@ -40,3 +40,24 @@ WHERE c.address_id IN (
 	INNER JOIN country c2 ON c2.country_id = c.country_id
 	WHERE c2.country = 'Canada'
 );
+
+/* 6 */
+SELECT f2.*
+FROM film f2
+INNER JOIN film_actor fa2 ON fa2.film_id = f2.film_id AND fa2.actor_id = (
+	SELECT a.actor_id
+	FROM film f
+	INNER JOIN film_actor fa ON fa.film_id = f.film_id
+	INNER JOIN actor a ON fa.actor_id = fa.actor_id
+	INNER JOIN inventory i ON f.film_id = i.film_id
+	INNER JOIN rental r ON r.inventory_id = i.inventory_id
+	INNER JOIN payment p ON p.rental_id = r.rental_id
+	GROUP BY a.actor_id
+	ORDER BY SUM(p.amount) DESC
+	LIMIT 1
+);
+
+/* 7 */
+
+
+/* 8 */
