@@ -76,3 +76,20 @@ WHERE c.customer_id = (
 );
 
 /* 8 */
+WITH con AS (
+	SELECT
+		c.customer_id AS 'client_id',
+		SUM(p.amount) AS 'sum'
+	FROM
+		customer c
+	INNER JOIN payment p ON
+		p.customer_id = c.customer_id
+	GROUP BY
+		c.customer_id
+)
+SELECT con.client_id, con.`sum` AS 'total_amount_spent'
+FROM con
+WHERE con.`sum` > (
+	SELECT AVG(p2.amount)
+	FROM payment p2
+);
